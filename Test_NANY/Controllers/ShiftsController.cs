@@ -9,7 +9,7 @@ namespace Test_NANY.Controllers
     [Route("api/[controller]")]
 
     [ApiController]
-    public class ShiftsController : Controller
+    public class ShiftsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -17,7 +17,7 @@ namespace Test_NANY.Controllers
 
         public ShiftsController(ApplicationDbContext context, IMapper mapper)
         {
-            context = context;
+            _context = context;
             _mapper = mapper;
         }
 
@@ -51,7 +51,7 @@ namespace Test_NANY.Controllers
             }
             var viewModel = _mapper.Map<ShiftViewModel>(shift);
 
-            return View(viewModel);
+            return Ok(viewModel);
         }
 
 
@@ -64,7 +64,7 @@ namespace Test_NANY.Controllers
 
             _context.Add(shift);
             await _context.SaveChangesAsync();
-            return View(shift);
+            return Ok(shift);
         }
 
         // GET: Shifts/Edit/5

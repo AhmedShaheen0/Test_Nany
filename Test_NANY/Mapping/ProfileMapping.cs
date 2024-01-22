@@ -18,6 +18,7 @@ namespace Test_NANY.Mapping
 
             CreateMap<Shift, ShiftViewModel>();
             CreateMap<Registration, RegistrationViewModel>();
+            CreateMap<NanySchedule,NanyScheduleViewModel>().ReverseMap();
 
 
         }

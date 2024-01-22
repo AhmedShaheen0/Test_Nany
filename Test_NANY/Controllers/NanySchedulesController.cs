@@ -4,36 +4,34 @@ using Microsoft.EntityFrameworkCore;
 using Test_NANY.Data;
 using Test_NANY.Data.Models;
 using Test_NANY.Data.ViewModels;
+
 namespace Test_NANY.Controllers
 {
-    [Route("api/[controller]")]
-
     [ApiController]
-    public class RegistrationController : Controller
+    [Route("[controller]")]
+    public class NanySchedulesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
         private readonly IMapper _mapper;
 
-        public RegistrationController(ApplicationDbContext context, IMapper mapper)
+        public NanySchedulesController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: Registration
-
+        //GET: NanySchedules
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var user = await _context.Registration.ToListAsync();
-            if (user == null) return NotFound();
-            var ViewModel = _mapper.Map<List<Registration>>(user);
+            var schedule = await _context.NanySchedule.ToListAsync();
+            if (schedule == null) return NotFound();
+            var ViewModel = _mapper.Map<List<NanyScheduleViewModel>>(schedule);
 
             return Ok(ViewModel);
         }
-        // GET: Registration/Details/5
 
+        //  GET: NanySchedules/Details/5
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,52 +40,51 @@ namespace Test_NANY.Controllers
                 return BadRequest();
             }
 
-            var user = await _context.Registration.FindAsync(id);
+            var schedule = await _context.NanySchedule.FindAsync(id);
 
-            if (user == null)
+            if (schedule == null)
             {
                 return NotFound();
             }
 
-            var viewModel = _mapper.Map<RegistrationViewModel>(user);
+            var viewModel = _mapper.Map<NanyScheduleViewModel>(schedule);
             return Ok(viewModel);
         }
 
-        // POST: Registration/Create
+        // GET: NanySchedules/Create
         [HttpPost]
-        public async Task<IActionResult> Create(NanyViewModel ViewModel)
+        public async Task<IActionResult> Create(NanyScheduleViewModel ViewModel)
         {
             if (!ModelState.IsValid) return BadRequest();
 
 
-            var user = _mapper.Map<Registration>(ViewModel);
+            var schedule = _mapper.Map<NanySchedule>(ViewModel);
 
-
-
-            _context.Add(user);
+            _context.Add(schedule);
             await _context.SaveChangesAsync();
-            return Ok(user);
+            return Ok(schedule);
 
         }
 
 
-        // POST: Registration/Edit/5
+
+        // POST: NanySchedules/Edit/5
         [HttpPut("Edit/{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] RegistrationViewModel user_update)
+        public async Task<IActionResult> Edit(int id, [FromBody] NanyScheduleViewModel schedule_update)
         {
-            if (id != user_update.UserId) return BadRequest();
+            if (id != schedule_update.Nany_Id) return BadRequest();
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = await _context.Registration.FindAsync(id);
+            var schedule = await _context.NanySchedule.FindAsync(id);
 
-            if (user == null)
+            if (schedule == null)
             {
                 return NotFound();
             }
 
             /// mapping
-            var ViewModel = _mapper.Map<Registration>(user_update);
+            var ViewModel = _mapper.Map<NanySchedule>(schedule_update);
 
             _context.Update(ViewModel);
             await _context.SaveChangesAsync();
@@ -95,8 +92,7 @@ namespace Test_NANY.Controllers
             return Ok();
         }
 
-
-        // GET: Registration/Delete/5
+        // Delete: NanySchedules/Delete/5
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
@@ -105,13 +101,15 @@ namespace Test_NANY.Controllers
                 return BadRequest();
             }
 
-            var user = await _context.Registration.FirstOrDefaultAsync(c => c.UserId == id);
+            var schedule = await _context.NanySchedule.FirstOrDefaultAsync(c => c.Nany_Id == id);
 
-            if (user == null)
+            if (schedule == null)
             {
                 return NotFound();
             }
-            _context.Registration.Remove(user);
+
+
+            _context.NanySchedule.Remove(schedule);
             await _context.SaveChangesAsync();
 
             return Ok();

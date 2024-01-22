@@ -19,7 +19,7 @@ namespace Test_NANY.Data
         public DbSet<ShiftViewModel> Shift { get; set; }
 
 
-        public DbSet<NanySchedule> NanySchedule { get; set; }
+        public DbSet<NanyScheduleViewModel> NanySchedule { get; set; }
 
 
     }
